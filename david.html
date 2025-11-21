@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Давид — история героя</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fee2e2, #bfdbfe, #1e293b);
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 18px;
+      padding: 16px 18px 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.28);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 140%;
+      height: 160%;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.32), transparent 60%);
+      top: -40%;
+      left: -30%;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: glowMove 8s linear infinite;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(239, 68, 68, 0.12);
+      color: #b91c1c;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97316;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.9);
+      animation: pulse 1.4s ease-out infinite;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 8px 0 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .emoji-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 22px;
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 4px 0 4px;
+    }
+
+    .section-text {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .highlight {
+      background: rgba(252, 211, 77, 0.4);
+      border-radius: 6px;
+      padding: 0 3px;
+    }
+
+    .image-preview {
+      margin-top: 8px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      min-height: 110px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: softZoom 10s ease-in-out infinite alternate;
+    }
+
+    .image-label {
+      position: absolute;
+      bottom: 6px;
+      left: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      font-size: 11px;
+    }
+
+    .timeline {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .timeline-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #f97316;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fefce8;
+      font-size: 11px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .thought {
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #fef9c3;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .thought strong {
+      color: #b45309;
+    }
+
+    .question-card {
+      margin-top: 4px;
+      padding: 10px 11px;
+      border-radius: 12px;
+      background: #eff6ff;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-card span {
+      font-weight: 600;
+    }
+
+    .mini-list {
+      margin: 4px 0 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .mini-list li {
+      margin-bottom: 2px;
+    }
+
+    .quiz {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quiz-question {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .quiz-option {
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 13px;
+      background: #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.15s ease-out, transform 0.1s ease-out;
+    }
+
+    .quiz-option:active {
+      transform: scale(0.98);
+    }
+
+    .quiz-option.correct {
+      background: #bbf7d0;
+    }
+
+    .quiz-option.wrong {
+      background: #fecaca;
+    }
+
+    .quiz-feedback {
+      font-size: 12px;
+      min-height: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      color: white;
+      box-shadow: 0 6px 14px rgba(219, 39, 119, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.55);
+      filter: brightness(0.95);
+    }
+
+    .bottom-note {
+      font-size: 11px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes pulse {
+      0% {transform: scale(1); opacity: 1;}
+      50% {transform: scale(1.25); opacity: 0.6;}
+      100% {transform: scale(1); opacity: 1;}
+    }
+
+    @keyframes float {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-4px);}
+    }
+
+    @keyframes glowMove {
+      0% {transform: translateX(0);}
+      100% {transform: translateX(40px);}
+    }
+
+    @keyframes softZoom {
+      from {transform: scale(1);}
+      to {transform: scale(1.08);}
+    }
+
+    @media (max-width: 360px) {
+      h1 {font-size: 20px;}
+      .section-text {font-size: 13px;}
+      button {font-size: 13px; padding: 8px 12px;}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- БЛОК 1: ЗНАКОМСТВО -->
+  <section class="card">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Я — Давид
+    </div>
+    <h1>История пастуха, певца и царя 🎵👑</h1>
+    <p class="subtitle">
+      Привет! Сейчас я расскажу тебе мою историю.
+    </p>
+    <div class="chips">
+      <div class="chip">🐑 пастух</div>
+      <div class="chip">🎶 псалмы</div>
+      <div class="chip">🪖 битвы</div>
+      <div class="chip">👑 царь</div>
+    </div>
+    <div class="emoji-row">
+      <span>🐑</span>
+      <span>🪈</span>
+      <span>🪖</span>
+      <span>🏹</span>
+    </div>
+  </section>
+
+  <!-- БЛОК 2: ПАСТУХ И МУЗЫКАНТ -->
+  <section class="card">
+    <div class="section-title">1. Я был самым младшим 🐑</div>
+    <p class="section-text">
+      В нашей семье было много братьев, и я был <span class="highlight">самый младший</span>.
+      Меня часто отправляли пасти овец в поле.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Кажется, что это простая работа, но она не всегда была спокойной.
+      Иногда приходили звери, и мне приходилось <span class="highlight">защищать стадо</span>.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Когда овцы спокойно ели траву, я играл на музыкальном инструменте и <span class="highlight">пел песни Богу</span>.
+      Позже такие песни стали называться псалмами.
+    </p>
+
+    <div class="image-preview" id="imagePreviewShepherd">
+      <span id="placeholderShepherd">Здесь будет картинка: мальчик с овцами и инструментом 🐑🎶</span>
+      <div class="image-label">Тихие вечера с овцами</div>
+    </div>
+
+    <div class="thought">
+      <strong>Запомни:</strong> Бог видит и тех, кто просто верно делает свою обычную работу, даже если никто другой не замечает.
+    </div>
+  </section>
+
+  <!-- БЛОК 3: ГОЛИАФ -->
+  <section class="card">
+    <div class="section-title">2. Один огромный воин ⚔️</div>
+    <p class="section-text">
+      Однажды наш народ был на войне. С другой стороны вышел <span class="highlight">огромный воин</span>.
+      Его звали Голиаф. Он был сильным, высоким и все его боялись.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Он смеялся над нашим народом и над Богом. Многие воины дрожали от страха.
+      А я был всего лишь юношей, <span class="highlight">без тяжёлой брони и меча</span>.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Но я знал: <strong>Бог сильнее любого гиганта</strong>.
+      Я взял свою пращу (это такая рогатка) и несколько камней.
+      Я пошёл не ради славы, а потому что доверял Богу.
+    </p>
+
+    <div class="image-preview" id="imagePreviewGoliath">
+      <span id="placeholderGoliath">Здесь будет картинка: маленький юноша и огромный воин ⚔️</span>
+      <div class="image-label">Встреча с Голиафом</div>
+    </div>
+
+    <div class="question-card">
+      <span>Маленький тест:</span>
+      <ul class="mini-list">
+        <li>Я победил Голиафа мечом и щитом? Или камнем и пращой?</li>
+        <li>Я надеялся на себя или на Бога?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- БЛОК 4: МУЗЫКА И ПСАЛМЫ -->
+  <section class="card">
+    <div class="section-title">3. Музыка, которая успокаивает 🎶</div>
+    <p class="section-text">
+      Позже я оказался при дворе царя. Иногда царю было <span class="highlight">очень тревожно и тяжело</span> внутри.
+      Тогда меня звали, чтобы я играл на инструменте и пел.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Когда звучала музыка, и я пел песни Богу, <span class="highlight">сердце царя успокаивалось</span>.
+      Это не была просто музыка — это была молитва в виде песни.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Многие мои песни о том, что:
+    </p>
+    <ul class="mini-list">
+      <li>Бог — как пастух, который ведёт;</li>
+      <li>Бог — защита в трудное время;</li>
+      <li>с Богом можно говорить о радости и о слезах.</li>
+    </ul>
+
+    <div class="image-preview" id="imagePreviewHarp">
+      <span id="placeholderHarp">Здесь будет картинка: я играю на арфе/лире для царя 🎵</span>
+      <div class="image-label">Песни как молитвы</div>
+    </div>
+  </section>
+
+  <!-- БЛОК 5: ЦАРЬ, ОШИБКИ И ПОКАЯНИЕ -->
+  <section class="card">
+    <div class="section-title">4. Я стал царём… но не идеальным 👑</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-text">
+          Со временем Бог сделал так, что именно я стал царём.
+          Это было большим доверием: <span class="highlight">вести весь народ</span>.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-text">
+          Но даже как царь я иногда поступал очень неправильно.
+          Я делал ошибки, грешил, ранил людей своими решениями.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-text">
+          Главное было не в том, что я всегда идеален, а в том, что я <span class="highlight">возвращался к Богу</span>:
+          признавал свою вину, просил прощения и снова хотел жить правильно.
+        </div>
+      </div>
+    </div>
+
+    <div class="image-preview" id="imagePreviewKing">
+      <span id="placeholderKing">Здесь будет картинка: я как царь, но с молитвой 🙏👑</span>
+      <div class="image-label">Царь с нуждой в Боге</div>
+    </div>
+
+    <div class="thought">
+      <strong>Главный урок:</strong> Бог не ищет «идеальных людей».
+      Он ищет тех, кто <strong>доверяет Ему</strong> и готов признавать свои ошибки.
+    </div>
+  </section>
+
+  <!-- БЛОК 6: ЗАКРЕПЛЕНИЕ -->
+  <section class="card">
+    <div class="section-title">5. Запомни про Давида ✅</div>
+    <div class="quiz">
+      <div class="quiz-question">1. Что было важно в моей битве с Голиафом?</div>
+      <div class="quiz-options" data-question="1">
+        <div class="quiz-option" data-correct="false">
+          <span>У меня была самая новая броня и огромный меч.</span><span>🗡️</span>
+        </div>
+        <div class="quiz-option" data-correct="true">
+          <span>Я доверял Богу, даже будучи маленьким и с пращой.</span><span>🪨</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback1"></div>
+
+      <div class="quiz-question">2. Чем я особенно служил Богу?</div>
+      <div class="quiz-options" data-question="2">
+        <div class="quiz-option" data-correct="true">
+          <span>Писал и пел псалмы, молясь в песнях.</span><span>🎶</span>
+        </div>
+        <div class="quiz-option" data-correct="false">
+          <span>Строил корабли и башни.</span><span>🏗️</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback2"></div>
+
+      <div class="quiz-question">3. Как я относился к своим ошибкам?</div>
+      <div class="quiz-options" data-question="3">
+        <div class="quiz-option" data-correct="false">
+          <span>Делал вид, что всё в порядке, и обвинял других.</span><span>😒</span>
+        </div>
+        <div class="quiz-option" data-correct="true">
+          <span>Сожалел, признавал свой грех и шёл к Богу.</span><span>🙏</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback3"></div>
+
+      <button id="rememberBtn">Я запомнил(а) Давида! ⭐</button>
+    </div>
+  </section>
+
+  <p class="bottom-note">
+    Позже, в игре, ты сможешь искать, кто из лидеров играет Давида.
+    Вспомни: пастух, музыка, Голиаф, царь, который умеет просить прощения 👑
+  </p>
+</div>
+
+<script>
+  // 🔹 ПУТИ К КАРТИНКАМ — ПОДСТАВИШЬ СВОИ
+  const images = {
+    shepherd: "PATH_TO_DAVID_SHEPHERD.jpg",
+    goliath:  "PATH_TO_DAVID_GOLIATH.jpg",
+    harp:     "PATH_TO_DAVID_HARP.jpg",
+    king:     "PATH_TO_DAVID_KING_PRAY.jpg"
+  };
+
+  function setupImage(previewId, placeholderId, imgPath) {
+    const preview = document.getElementById(previewId);
+    const placeholder = document.getElementById(placeholderId);
+    if (!preview) return;
+    if (imgPath) {
+      const labelText = preview.querySelector(".image-label")?.textContent || "Иллюстрация";
+      preview.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = imgPath;
+      img.alt = "Сцена из жизни Давида";
+      preview.appendChild(img);
+
+      const label = document.createElement("div");
+      label.className = "image-label";
+      label.textContent = labelText;
+      preview.appendChild(label);
+    } else if (placeholder) {
+      placeholder.textContent = "Добавь путь к картинке в JS 🙂";
+    }
+  }
+
+  // 🧠 МИНИ-ВИКТОРИНА
+  const groups = document.querySelectorAll(".quiz-options");
+  groups.forEach(group => {
+    group.addEventListener("click", (e) => {
+      const option = e.target.closest(".quiz-option");
+      if (!option) return;
+      const isCorrect = option.getAttribute("data-correct") === "true";
+      const questionId = group.getAttribute("data-question");
+      const feedback = document.getElementById("feedback" + questionId);
+
+      group.querySelectorAll(".quiz-option").forEach(opt => {
+        opt.classList.remove("correct", "wrong");
+      });
+
+      if (isCorrect) {
+        option.classList.add("correct");
+        if (feedback) feedback.textContent = "Верно! 👍";
+      } else {
+        option.classList.add("wrong");
+        if (feedback) feedback.textContent = "Не совсем. Перечитай историю 🙂";
+      }
+    });
+  });
+
+  // ✨ КНОПКА "Я ЗАПОМНИЛ(А)"
+  const rememberBtn = document.getElementById("rememberBtn");
+  if (rememberBtn) {
+    rememberBtn.addEventListener("click", () => {
+      rememberBtn.textContent = "Класс! Ты хорошо знаешь Давида 🎉";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setupImage("imagePreviewShepherd", "placeholderShepherd", images.shepherd);
+    setupImage("imagePreviewGoliath",  "placeholderGoliath",  images.goliath);
+    setupImage("imagePreviewHarp",     "placeholderHarp",     images.harp);
+    setupImage("imagePreviewKing",     "placeholderKing",     images.king);
+  });
+</script>
+</body>
+</html>
