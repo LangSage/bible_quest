@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Мария — история героини</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fee2e2, #fef3c7, #1e293b);
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 18px;
+      padding: 16px 18px 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 140%;
+      height: 160%;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.3), transparent 60%);
+      top: -40%;
+      left: -30%;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: glowMove 8s linear infinite;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(248, 113, 113, 0.16);
+      color: #b91c1c;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97316;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.9);
+      animation: pulse 1.4s ease-out infinite;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 8px 0 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .emoji-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 22px;
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 4px 0 4px;
+    }
+
+    .section-text {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .highlight {
+      background: rgba(252, 211, 77, 0.4);
+      border-radius: 6px;
+      padding: 0 3px;
+    }
+
+    .image-preview {
+      margin-top: 8px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      min-height: 110px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: softZoom 10s ease-in-out infinite alternate;
+    }
+
+    .image-label {
+      position: absolute;
+      bottom: 6px;
+      left: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      font-size: 11px;
+    }
+
+    .timeline {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .timeline-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #f97316;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-size: 11px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .thought {
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #fee2e2;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .thought strong {
+      color: #b91c1c;
+    }
+
+    .question-card {
+      margin-top: 4px;
+      padding: 10px 11px;
+      border-radius: 12px;
+      background: #fef9c3;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-card span {
+      font-weight: 600;
+    }
+
+    .mini-list {
+      margin: 4px 0 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .mini-list li {
+      margin-bottom: 2px;
+    }
+
+    .quiz {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quiz-question {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .quiz-option {
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 13px;
+      background: #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.15s ease-out, transform 0.1s ease-out;
+    }
+
+    .quiz-option:active {
+      transform: scale(0.98);
+    }
+
+    .quiz-option.correct {
+      background: #bbf7d0;
+    }
+
+    .quiz-option.wrong {
+      background: #fecaca;
+    }
+
+    .quiz-feedback {
+      font-size: 12px;
+      min-height: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ec4899, #f97316);
+      color: white;
+      box-shadow: 0 6px 14px rgba(248, 113, 113, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.55);
+      filter: brightness(0.95);
+    }
+
+    .bottom-note {
+      font-size: 11px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes pulse {
+      0% {transform: scale(1); opacity: 1;}
+      50% {transform: scale(1.25); opacity: 0.6;}
+      100% {transform: scale(1); opacity: 1;}
+    }
+
+    @keyframes float {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-4px);}
+    }
+
+    @keyframes glowMove {
+      0% {transform: translateX(0);}
+      100% {transform: translateX(40px);}
+    }
+
+    @keyframes softZoom {
+      from {transform: scale(1);}
+      to {transform: scale(1.08);}
+    }
+
+    @media (max-width: 360px) {
+      h1 {font-size: 20px;}
+      .section-text {font-size: 13px;}
+      button {font-size: 13px; padding: 8px 12px;}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- БЛОК 1: ЗНАКОМСТВО -->
+  <section class="card">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Я — Мария
+    </div>
+    <h1>История мамы Иисуса 🌟</h1>
+    <p class="subtitle">
+      Привет! Сейчас я расскажу тебе мою историю.
+    </p>
+    <div class="chips">
+      <div class="chip">👧 простая девушка</div>
+      <div class="chip">🌿 Назарет</div>
+      <div class="chip">👶 рождение Иисуса</div>
+      <div class="chip">💛 доверие Богу</div>
+    </div>
+    <div class="emoji-row">
+      <span>🏡</span>
+      <span>👧</span>
+      <span>👼</span>
+      <span>👶</span>
+    </div>
+  </section>
+
+  <!-- БЛОК 2: ПРОСТАЯ ЖИЗНЬ В НАЗАРЕТЕ -->
+  <section class="card">
+    <div class="section-title">1. Я жила в маленьком городке 🏡</div>
+    <p class="section-text">
+      Я была <span class="highlight">обычной молодой девушкой</span>, которая жила в городе Назарет.
+      Это был не большой и не важный город, а простой и тихий.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Я была обручена с мужчиной по имени <span class="highlight">Иосиф</span>.
+      Мы собирались пожениться и жить обычной жизнью: семья, работа, заботы.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Я любила Бога и хотела Ему послушаться, даже в обычных делах каждый день.
+    </p>
+
+    <div class="image-preview" id="imagePreviewNazareth">
+      <span id="placeholderNazareth">Здесь будет картинка: маленький город Назарет 🏡</span>
+      <div class="image-label">Моё обычное начало</div>
+    </div>
+
+    <div class="thought">
+      <strong>Запомни:</strong> Бог может выбрать для особого дела даже того, кто живёт в самом обычном месте.
+    </div>
+  </section>
+
+  <!-- БЛОК 3: ВИЗИТ АНГЕЛА -->
+  <section class="card">
+    <div class="section-title">2. Неожиданный гость — ангел 👼</div>
+    <p class="section-text">
+      Однажды ко мне пришёл <span class="highlight">ангел</span>.
+      Это был не сон и не фантазия — я очень испугалась, потому что это было необычно.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Ангел сказал, что Бог <strong>видит моё сердце</strong> и что у Него есть для меня особенный план.
+      Я должна была стать мамой <span class="highlight">Того, Кто спасёт людей</span>.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Я не до конца понимала, как это всё будет. Но я ответила важные слова:
+      <span class="highlight">«Я — Господня слуга, пусть будет по слову Твоему»</span>.
+      Я согласилась довериться Богу.
+    </p>
+
+    <div class="image-preview" id="imagePreviewAngel">
+      <span id="placeholderAngel">Здесь будет картинка: ангел говорит с Марией 👼</span>
+      <div class="image-label">Разговор с ангелом</div>
+    </div>
+
+    <div class="question-card">
+      <span>Подумай:</span>
+      <ul class="mini-list">
+        <li>Легко ли доверять Богу, когда ты не всё понимаешь?</li>
+        <li>Готов ли ты сказать: «Боже, пусть будет, как Ты хочешь»?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- БЛОК 4: БЕТЛЕЕМ И РОЖДЕНИЕ ИИСУСА -->
+  <section class="card">
+    <div class="section-title">3. Дорога, пещера и Рождение 👶</div>
+    <p class="section-text">
+      В то время вышел указ: всем нужно было <span class="highlight">идти на перепись</span> в города,
+      откуда была их семья. Поэтому мы с Иосифом отправились в <strong>Вифлеем</strong>.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Дорога была долгой, и когда мы пришли, <span class="highlight">места в гостинице не нашлось</span>.
+      Нам пришлось остановиться там, где обычно держали животных.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Именно там <strong>родился Иисус</strong>. Я пеленала Его и положила в ясли — кормушку для животных.
+      Ночью к нам пришли пастухи. Они рассказали, что ангелы на небе возвестили им о рождении Спасителя.
+    </p>
+
+    <div class="image-preview" id="imagePreviewBethlehem">
+      <span id="placeholderBethlehem">Здесь будет картинка: пещера/стойло, ясли, младенец Иисус 👶⭐</span>
+      <div class="image-label">Рождение Иисуса</div>
+    </div>
+
+    <div class="thought">
+      Бог выбрал <strong>не роскошный дворец</strong>, а простое место, но именно там произошло самое важное рождение.
+    </div>
+  </section>
+
+  <!-- БЛОК 5: МАРИЯ И ИИСУС РАСТЁТ -->
+  <section class="card">
+    <div class="section-title">4. Я хранила всё в сердце 💛</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-text">
+          Когда Иисус рос, я видела, что Он особенный.
+          Но при этом я была обычной мамой: заботилась, кормила, учила, переживала.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-text">
+          Иногда происходило то, что трудно было понять.
+          Люди говорили удивительные вещи про Него.
+          Я <span class="highlight">не всё могла объяснить</span>, но «хранила всё это в своём сердце».
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-text">
+          Я была рядом в радости и в очень трудные моменты.
+          Я не была идеальной, но <strong>хотела быть верной Богу и своему сыну</strong>.
+        </div>
+      </div>
+    </div>
+
+    <div class="image-preview" id="imagePreviewFamily">
+      <span id="placeholderFamily">Здесь будет картинка: Мария, Иосиф и юный Иисус 👨‍👩‍👦</span>
+      <div class="image-label">Семья, которой руководит Бог</div>
+    </div>
+
+    <div class="thought">
+      <strong>Главный урок моей истории:</strong> иногда Бог доверяет нам людей, о которых нужно заботиться.
+      Верность — это не только большие моменты, но и <strong>ежедневная любовь</strong>.
+    </div>
+  </section>
+
+  <!-- БЛОК 6: ЗАКРЕПЛЕНИЕ -->
+  <section class="card">
+    <div class="section-title">5. Запомни про Марию ✅</div>
+    <div class="quiz">
+      <div class="quiz-question">1. Кем я была до всего этого?</div>
+      <div class="quiz-options" data-question="1">
+        <div class="quiz-option" data-correct="true">
+          <span>Простой девушкой из Назарета.</span><span>🏡</span>
+        </div>
+        <div class="quiz-option" data-correct="false">
+          <span>Знаменитой царицей из большого города.</span><span>👑</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback1"></div>
+
+      <div class="quiz-question">2. Что сказал мне ангел?</div>
+      <div class="quiz-options" data-question="2">
+        <div class="quiz-option" data-correct="false">
+          <span>Что у меня будет обычный сын, без особого смысла.</span><span>🤷‍♀️</span>
+        </div>
+        <div class="quiz-option" data-correct="true">
+          <span>Что я стану мамой Того, Кто спасёт людей.</span><span>🌟</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback2"></div>
+
+      <div class="quiz-question">3. Как я отреагировала на Божий план?</div>
+      <div class="quiz-options" data-question="3">
+        <div class="quiz-option" data-correct="true">
+          <span>Сказала, что хочу послушаться: «пусть будет по слову Твоему».</span><span>💛</span>
+        </div>
+        <div class="quiz-option" data-correct="false">
+          <span>Отказалась и убежала как можно дальше.</span><span>🏃‍♀️</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback3"></div>
+
+      <button id="rememberBtn">Я запомнил(а) Марию! ⭐</button>
+    </div>
+  </section>
+
+  <p class="bottom-note">
+    В игре вспомни: Назарет, ангел, Вифлеем, ясли, мама Иисуса.
+    Так ты догадаешься, кто из лидеров играет Марию 🌟
+  </p>
+</div>
+
+<script>
+  // 🔹 ПУТИ К КАРТИНКАМ — ПОДСТАВИШЬ СВОИ
+  const images = {
+    nazareth: "PATH_TO_MARY_NAZARETH_TOWN.jpg",
+    angel:    "PATH_TO_MARY_AND_ANGEL.jpg",
+    bethlehem:"PATH_TO_MARY_BETHLEHEM_BIRTH.jpg",
+    family:   "PATH_TO_MARY_JOSEPH_JESUS_FAMILY.jpg"
+  };
+
+  function setupImage(previewId, placeholderId, imgPath, altText) {
+    const preview = document.getElementById(previewId);
+    const placeholder = document.getElementById(placeholderId);
+    if (!preview) return;
+    if (imgPath) {
+      const labelText = preview.querySelector(".image-label")?.textContent || "Иллюстрация";
+      preview.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = imgPath;
+      img.alt = altText || "Сцена из жизни Марии";
+      preview.appendChild(img);
+
+      const label = document.createElement("div");
+      label.className = "image-label";
+      label.textContent = labelText;
+      preview.appendChild(label);
+    } else if (placeholder) {
+      placeholder.textContent = "Добавь путь к картинке в JS 🙂";
+    }
+  }
+
+  // 🧠 МИНИ-ВИКТОРИНА
+  const groups = document.querySelectorAll(".quiz-options");
+  groups.forEach(group => {
+    group.addEventListener("click", (e) => {
+      const option = e.target.closest(".quiz-option");
+      if (!option) return;
+      const isCorrect = option.getAttribute("data-correct") === "true";
+      const questionId = group.getAttribute("data-question");
+      const feedback = document.getElementById("feedback" + questionId);
+
+      group.querySelectorAll(".quiz-option").forEach(opt => {
+        opt.classList.remove("correct", "wrong");
+      });
+
+      if (isCorrect) {
+        option.classList.add("correct");
+        if (feedback) feedback.textContent = "Верно! 👍";
+      } else {
+        option.classList.add("wrong");
+        if (feedback) feedback.textContent = "Не совсем. Перечитай историю 🙂";
+      }
+    });
+  });
+
+  // ✨ КНОПКА "Я ЗАПОМНИЛ(А)"
+  const rememberBtn = document.getElementById("rememberBtn");
+  if (rememberBtn) {
+    rememberBtn.addEventListener("click", () => {
+      rememberBtn.textContent = "Класс! Ты хорошо запомнил(а) Марию 🎉";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setupImage("imagePreviewNazareth", "placeholderNazareth", images.nazareth, "Назарет");
+    setupImage("imagePreviewAngel",    "placeholderAngel",    images.angel,    "Ангел и Мария");
+    setupImage("imagePreviewBethlehem","placeholderBethlehem",images.bethlehem,"Рождение Иисуса");
+    setupImage("imagePreviewFamily",   "placeholderFamily",   images.family,   "Святая семья");
+  });
+</script>
+</body>
+</html>

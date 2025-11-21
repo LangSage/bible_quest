@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Есфирь — история героини</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fdf2ff, #e0e7ff, #1e1b4b);
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 18px;
+      padding: 16px 18px 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 140%;
+      height: 160%;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.3), transparent 60%);
+      top: -40%;
+      left: -30%;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: glowMove 8s linear infinite;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(147, 51, 234, 0.12);
+      color: #7e22ce;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97316;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.9);
+      animation: pulse 1.4s ease-out infinite;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 8px 0 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .emoji-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 22px;
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 4px 0 4px;
+    }
+
+    .section-text {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .highlight {
+      background: rgba(252, 211, 77, 0.4);
+      border-radius: 6px;
+      padding: 0 3px;
+    }
+
+    .image-preview {
+      margin-top: 8px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      min-height: 110px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: softZoom 10s ease-in-out infinite alternate;
+    }
+
+    .image-label {
+      position: absolute;
+      bottom: 6px;
+      left: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      font-size: 11px;
+    }
+
+    .timeline {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .timeline-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #7c3aed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-size: 11px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .thought {
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #f3e8ff;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .thought strong {
+      color: #7e22ce;
+    }
+
+    .question-card {
+      margin-top: 4px;
+      padding: 10px 11px;
+      border-radius: 12px;
+      background: #fef9c3;
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-card span {
+      font-weight: 600;
+    }
+
+    .mini-list {
+      margin: 4px 0 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+
+    .mini-list li {
+      margin-bottom: 2px;
+    }
+
+    .quiz {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quiz-question {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .quiz-option {
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 13px;
+      background: #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.15s ease-out, transform 0.1s ease-out;
+    }
+
+    .quiz-option:active {
+      transform: scale(0.98);
+    }
+
+    .quiz-option.correct {
+      background: #bbf7d0;
+    }
+
+    .quiz-option.wrong {
+      background: #fecaca;
+    }
+
+    .quiz-feedback {
+      font-size: 12px;
+      min-height: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: white;
+      box-shadow: 0 6px 14px rgba(126, 34, 206, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.55);
+      filter: brightness(0.95);
+    }
+
+    .bottom-note {
+      font-size: 11px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes pulse {
+      0% {transform: scale(1); opacity: 1;}
+      50% {transform: scale(1.25); opacity: 0.6;}
+      100% {transform: scale(1); opacity: 1;}
+    }
+
+    @keyframes float {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-4px);}
+    }
+
+    @keyframes glowMove {
+      0% {transform: translateX(0);}
+      100% {transform: translateX(40px);}
+    }
+
+    @keyframes softZoom {
+      from {transform: scale(1);}
+      to {transform: scale(1.08);}
+    }
+
+    @media (max-width: 360px) {
+      h1 {font-size: 20px;}
+      .section-text {font-size: 13px;}
+      button {font-size: 13px; padding: 8px 12px;}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- БЛОК 1: ЗНАКОМСТВО -->
+  <section class="card">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Я — Есфирь
+    </div>
+    <h1>История простой девушки, ставшей царицей 👑</h1>
+    <p class="subtitle">
+      Привет! Сейчас я расскажу тебе мою историю.
+    </p>
+    <div class="chips">
+      <div class="chip">👧 простое начало</div>
+      <div class="chip">👑 дворец</div>
+      <div class="chip">🙏 пост и молитва</div>
+      <div class="chip">💬 смелый разговор</div>
+    </div>
+    <div class="emoji-row">
+      <span>👧</span>
+      <span>🏙️</span>
+      <span>👑</span>
+      <span>🙏</span>
+    </div>
+  </section>
+
+  <!-- БЛОК 2: ДЕТСТВО И МАРДОХЕЙ -->
+  <section class="card">
+    <div class="section-title">1. Я не выросла в сказке 👧</div>
+    <p class="section-text">
+      Я была <span class="highlight">обычной еврейской девушкой</span>, и моё начало жизни было непростым.
+      Мои мама и папа умерли, когда я была ещё ребёнком.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Меня принял к себе мой родственник по имени <span class="highlight">Мардохей</span>.
+      Он заботился обо мне, как о своей дочери, учил меня любить Бога и наш народ.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Мы жили в большой чужой стране, среди других народов.
+      Иногда это казалось страшным, но Бог был с нами и там.
+    </p>
+
+    <div class="image-preview" id="imagePreviewHome">
+      <span id="placeholderHome">Здесь будет картинка: Мардохей и девочка Есфирь 👧👨</span>
+      <div class="image-label">Семья, которую дал Бог</div>
+    </div>
+
+    <div class="thought">
+      <strong>Запомни:</strong> даже если начало жизни непростое, Бог может подарить людей, которые будут рядом и поддержат.
+    </div>
+  </section>
+
+  <!-- БЛОК 3: ДВОРЕЦ И ЦАРИЦА -->
+  <section class="card">
+    <div class="section-title">2. Вдруг — дворец и корона 👑</div>
+    <p class="section-text">
+      В нашей стране жил <span class="highlight">могущественный царь</span>. Однажды во дворец стали собирать многих девушек,
+      чтобы среди них выбрать новую царицу.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Так я оказалась в месте, о котором раньше только слышала: высокие стены, слуги, украшения, богатство.
+      Но Мардохей просил меня <span class="highlight">не рассказывать всем сразу, из какого я народа</span>.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Бог дал мне красоту и доброту, и царь выбрал <strong>именно меня</strong> царицей.
+      Это звучит как сказка, но это было <span class="highlight">серьёзное новое место</span>,
+      где у меня появилось большое влияние и большая ответственность.
+    </p>
+
+    <div class="image-preview" id="imagePreviewPalace">
+      <span id="placeholderPalace">Здесь будет картинка: я во дворце с короной 👑</span>
+      <div class="image-label">Неожиданная царица</div>
+    </div>
+
+    <div class="question-card">
+      <span>Подумай:</span>
+      <ul class="mini-list">
+        <li>Если бы ты оказался(ась) в важном месте, думал(а) бы только о себе?</li>
+        <li>Или спрашивал(а) бы: «Бог, зачем Ты привёл меня сюда?»</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- БЛОК 4: ОПАСНОСТЬ ДЛЯ НАРОДА -->
+  <section class="card">
+    <div class="section-title">3. Нашему народу угрожала беда ⚠️</div>
+    <p class="section-text">
+      Во дворце был один человек по имени <span class="highlight">Аман</span>. Он возгордился и захотел,
+      чтобы все кланялись ему. Мардохей, который любил Бога, отказался поклоняться человеку.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Аман сильно рассердился и придумал страшный план: <span class="highlight">уничтожить весь наш народ</span>.
+      Он обманом убедил царя согласиться на этот указ.
+    </p>
+    <p class="section-text" style="margin-top:4px;">
+      Мардохей прислал мне весть: наш народ в опасности.
+      Я жила во дворце, но это не значило, что я могу просто спокойно молчать.
+    </p>
+
+    <div class="image-preview" id="imagePreviewLetter">
+      <span id="placeholderLetter">Здесь будет картинка: свиток/письмо и тревога на лицах 📜😟</span>
+      <div class="image-label">Страшная новость</div>
+    </div>
+
+    <div class="thought">
+      Иногда кажется: «Я один ничего не решаю». Но Бог может поставить человека именно туда,
+      где <strong>его голос очень важен</strong>.
+    </div>
+  </section>
+
+  <!-- БЛОК 5: ПОСТ, МОЛИТВА И СМЕЛОСТЬ -->
+  <section class="card">
+    <div class="section-title">4. Я решила не молчать 🙏💬</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-text">
+          Тогда я сказала Мардохею: <span class="highlight">«Собери людей, пусть они постятся за меня»</span>.
+          Я сама с подругами тоже постилась — это было время особой молитвы и зависимости от Бога.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-text">
+          В нашей стране к царю нельзя было просто так прийти.
+          Если царь не протянет к тебе скипетр, можно было <span class="highlight">потерять жизнь</span>.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-text">
+          Я всё равно пошла. Я сказала: <strong>«Если погибнуть — погибну, но я попробую спасти свой народ»</strong>.
+          Бог дал мне милость в глазах царя, и он выслушал меня.
+        </div>
+      </div>
+    </div>
+
+    <div class="image-preview" id="imagePreviewThrone">
+      <span id="placeholderThrone">Здесь будет картинка: я стою перед царём на троне 👑🙏</span>
+      <div class="image-label">Смелый шаг к царю</div>
+    </div>
+
+    <div class="thought">
+      <strong>Главный урок моей истории:</strong> Бог может поставить тебя в особое место
+      «<span class="highlight">для такого времени, как это</span>», чтобы через тебя помочь другим.
+    </div>
+  </section>
+
+  <!-- БЛОК 6: ЗАКРЕПЛЕНИЕ -->
+  <section class="card">
+    <div class="section-title">5. Запомни про Есфирь ✅</div>
+    <div class="quiz">
+      <div class="quiz-question">1. Почему я оказалась во дворце?</div>
+      <div class="quiz-options" data-question="1">
+        <div class="quiz-option" data-correct="false">
+          <span>Только чтобы жить в красоте и забыть обо всех.</span><span>💄</span>
+        </div>
+        <div class="quiz-option" data-correct="true">
+          <span>Бог использовал моё место, чтобы спасти наш народ.</span><span>👑</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback1"></div>
+
+      <div class="quiz-question">2. Что я попросила людей делать, прежде чем идти к царю?</div>
+      <div class="quiz-options" data-question="2">
+        <div class="quiz-option" data-correct="true">
+          <span>Поститься и молиться вместе со мной.</span><span>🙏</span>
+        </div>
+        <div class="quiz-option" data-correct="false">
+          <span>Собрать мне самую лучшую одежду и украшения.</span><span>👗</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback2"></div>
+
+      <div class="quiz-question">3. Какое решение я приняла?</div>
+      <div class="quiz-options" data-question="3">
+        <div class="quiz-option" data-correct="false">
+          <span>Прятаться и делать вид, что ничего не знаю.</span><span>🙈</span>
+        </div>
+        <div class="quiz-option" data-correct="true">
+          <span>Рисковать собой, чтобы помочь своему народу.</span><span>❤️</span>
+        </div>
+      </div>
+      <div class="quiz-feedback" id="feedback3"></div>
+
+      <button id="rememberBtn">Я запомнил(а) Есфирь! ⭐</button>
+    </div>
+  </section>
+
+  <p class="bottom-note">
+    В игре ты сможешь искать, кто из лидеров играет Есфирь.
+    Вспомни: Мардохей, дворец, пост, смелый разговор с царём 👑
+  </p>
+</div>
+
+<script>
+  // 🔹 ПУТИ К КАРТИНКАМ — ПОДСТАВИШЬ СВОИ
+  const images = {
+    home:   "PATH_TO_ESTHER_WITH_MORDECAI.jpg",
+    palace: "PATH_TO_ESTHER_IN_PALACE.jpg",
+    letter: "PATH_TO_ESTHER_BAD_NEWS_SCROLL.jpg",
+    throne: "PATH_TO_ESTHER_BEFORE_KING.jpg"
+  };
+
+  function setupImage(previewId, placeholderId, imgPath) {
+    const preview = document.getElementById(previewId);
+    const placeholder = document.getElementById(placeholderId);
+    if (!preview) return;
+    if (imgPath) {
+      const labelText = preview.querySelector(".image-label")?.textContent || "Иллюстрация";
+      preview.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = imgPath;
+      img.alt = "Сцена из жизни Есфири";
+      preview.appendChild(img);
+
+      const label = document.createElement("div");
+      label.className = "image-label";
+      label.textContent = labelText;
+      preview.appendChild(label);
+    } else if (placeholder) {
+      placeholder.textContent = "Добавь путь к картинке в JS 🙂";
+    }
+  }
+
+  // 🧠 МИНИ-ВИКТОРИНА
+  const groups = document.querySelectorAll(".quiz-options");
+  groups.forEach(group => {
+    group.addEventListener("click", (e) => {
+      const option = e.target.closest(".quiz-option");
+      if (!option) return;
+      const isCorrect = option.getAttribute("data-correct") === "true";
+      const questionId = group.getAttribute("data-question");
+      const feedback = document.getElementById("feedback" + questionId);
+
+      group.querySelectorAll(".quiz-option").forEach(opt => {
+        opt.classList.remove("correct", "wrong");
+      });
+
+      if (isCorrect) {
+        option.classList.add("correct");
+        if (feedback) feedback.textContent = "Верно! 👍";
+      } else {
+        option.classList.add("wrong");
+        if (feedback) feedback.textContent = "Не совсем. Перечитай историю 🙂";
+      }
+    });
+  });
+
+  // ✨ КНОПКА "Я ЗАПОМНИЛ(А)"
+  const rememberBtn = document.getElementById("rememberBtn");
+  if (rememberBtn) {
+    rememberBtn.addEventListener("click", () => {
+      rememberBtn.textContent = "Класс! Ты хорошо запомнил(а) Есфирь 🎉";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setupImage("imagePreviewHome",   "placeholderHome",   images.home);
+    setupImage("imagePreviewPalace", "placeholderPalace", images.palace);
+    setupImage("imagePreviewLetter", "placeholderLetter", images.letter);
+    setupImage("imagePreviewThrone", "placeholderThrone", images.throne);
+  });
+</script>
+</body>
+</html>
