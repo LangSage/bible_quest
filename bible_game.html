@@ -29,7 +29,7 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #0f172a 0, #020617 50%, #000 100%);
       color: var(--text-main);
-      overflow: hidden;
+      overflow: hidden; /* без внешнего скролла */
     }
 
     body {
@@ -41,95 +41,83 @@
     .app {
       width: 100%;
       max-width: 1200px;
-      padding: 1.5rem 1.2rem;
+      padding: 0.8rem 1.1rem 0.7rem;
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 0.7rem;
       position: relative;
-      height: 100vh;
+      height: 100vh; /* фиксируем на высоту экрана */
     }
 
     @media (min-width: 768px) {
       .app {
-        padding: 1.8rem 2rem;
+        padding: 1rem 1.6rem 0.8rem;
       }
     }
 
-    .title {
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      font-size: clamp(1.1rem, 2.3vw, 1.6rem);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      min-height: 1.5rem; /* чтобы не прыгал layout */
-    }
-
-    .subtitle {
-      display: none;
-    }
-
-    .verse {
-      display: none;
-    }
+    .title { min-height: 1.2rem; }
+    .subtitle,
+    .verse { display: none; }
 
     .top-row {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      flex: 1;
+      gap: 0.7rem;
+      flex: 1;       /* занимает всё между верхом и баром снизу */
+      min-height: 0; /* чтобы flex мог сжиматься */
     }
 
     @media (min-width: 900px) {
       .top-row {
         flex-direction: row;
-        align-items: center; /* центр по вертикали */
+        align-items: stretch; /* обе колонки по полной высоте */
       }
     }
 
     /* PERSON CARD */
 
     .person-area {
-      flex: 1.2;
+      flex: 1.1;
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
-      position: relative;
+      gap: 0.4rem;
+      min-height: 0;
     }
 
-    .hint {
-      display: none;
-    }
+    .hint { display: none; }
 
     .person-wrapper {
       position: relative;
       flex: 1;
-      min-height: 220px;
+      min-height: 0;
       display: flex;
-      align-items: center;
+      align-items: stretch;    /* карточка растягивается по высоте */
       justify-content: center;
-      padding: 0.7rem;
+      padding: 0.4rem;
     }
 
     .person-card {
       position: relative;
-      width: min(420px, 90vw);
-      max-width: 480px;
+      width: min(380px, 86vw);
+      max-width: 420px;
       background: radial-gradient(circle at top, #1f2937, #020617);
-      border-radius: 1.6rem;
+      border-radius: 1.4rem;
       box-shadow: var(--shadow-strong);
-      padding: 1.1rem 1.3rem 1.2rem;
+      padding: 0.8rem 1rem 0.8rem;
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 0.8rem;
+      gap: 0.5rem;
       cursor: grab;
       touch-action: none;
       user-select: none;
       animation: floatCard 3s ease-in-out infinite;
       border: 1px solid rgba(148,163,184,0.4);
-      margin: 0 auto; /* на всякий случай центр */
+      margin: 0 auto;
+      height: 100%;      /* 👈 тянем на всю высоту колонки */
+      max-height: none;
+      overflow: hidden;  /* лишнее обрежется внутри */
+      min-height: 0;
     }
 
     .person-card.dragging {
@@ -141,30 +129,32 @@
 
     @keyframes floatCard {
       0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-6px); }
     }
 
     .person-label {
-      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      font-size: clamp(1.4rem, 2.4vw, 1.9rem);
       font-weight: 700;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .person-tagline {
-      font-size: clamp(1.05rem, 2.3vw, 1.5rem);
+      font-size: clamp(0.95rem, 1.8vw, 1.2rem);
       color: var(--text-muted);
       text-align: center;
+      flex-shrink: 0;
     }
 
     .person-photo {
       width: 100%;
-      border-radius: 1.2rem;
+      border-radius: 1rem;
       overflow: hidden;
       background: #020617;
       border: 1px solid rgba(148,163,184,0.7);
       position: relative;
-      aspect-ratio: 4 / 3;
-      margin-top: 0.2rem;
+      aspect-ratio: 16 / 9;
+      flex-shrink: 0;  /* картинка фиксированной высоты */
     }
 
     .person-photo img {
@@ -176,42 +166,35 @@
 
     .person-badge {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 8px;
+      right: 8px;
       background: rgba(15,23,42,0.85);
-      padding: 0.3rem 0.7rem;
+      padding: 0.25rem 0.6rem;
       border-radius: 999px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.25rem;
       border: 1px solid rgba(249,250,251,0.2);
     }
 
-    .person-badge span.icon {
-      opacity: 0.8;
-    }
-
-    .person-counter {
-      margin-top: 0.25rem;
-      font-size: clamp(0.95rem, 1.7vw, 1.15rem);
-      color: var(--text-muted);
-      text-align: center;
-    }
+    .person-badge span.icon { opacity: 0.8; }
 
     .person-stats {
-      margin-top: 0.4rem;
-      padding: 0.7rem 0.9rem;
-      border-radius: 1rem;
+      margin-top: 0.2rem;
+      padding: 0.5rem 0.7rem;
+      border-radius: 0.9rem;
       background: rgba(15,23,42,0.85);
       border: 1px solid rgba(55,65,81,0.9);
-      font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+      font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+      flex: 1 1 auto;    /* занимает всё свободное место */
+      min-height: 0;
+      overflow-y: auto;   /* если много текста — отдельный скролл */
     }
 
     .person-stats-title {
       font-weight: 600;
-      margin-bottom: 0.3rem;
-      font-size: 1em;
+      margin-bottom: 0.2rem;
       color: #e5e7eb;
     }
 
@@ -223,50 +206,56 @@
 
     .person-stats li {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.4rem;
       align-items: flex-start;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.1rem;
       color: var(--text-muted);
     }
 
     .person-stats li span.bullet {
-      font-size: 1em;
-      margin-top: 0.1rem;
+      font-size: 0.9em;
+      margin-top: 0.08rem;
+    }
+
+    .person-counter {
+      margin-top: 0.15rem;
+      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+      color: var(--text-muted);
+      text-align: center;
+      flex-shrink: 0;
     }
 
     /* HOUSES */
 
     .houses-area {
-      flex: 1.2;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.5rem;
+      min-height: 0;
     }
 
-    .houses-title {
-      display: none;
-    }
+    .houses-title { display: none; }
 
     .houses-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.9rem;
+      gap: 0.7rem;
       align-items: stretch;
       justify-content: center;
     }
 
     .house {
       flex: 1 1 45%;
-      max-width: 260px;
-      min-width: 150px;
-      min-height: 150px;
+      max-width: 250px;
+      min-width: 145px;
       background: linear-gradient(145deg, rgba(30,64,175,0.5), rgba(15,23,42,0.9));
-      border-radius: 1.2rem;
-      padding: 0.6rem 0.7rem 0.7rem;
+      border-radius: 1.1rem;
+      padding: 0.5rem 0.6rem 0.5rem;
       position: relative;
       overflow: hidden;
       border: 1px solid rgba(148,163,184,0.7);
-      box-shadow: 0 18px 35px rgba(15,23,42,0.7);
+      box-shadow: 0 14px 30px rgba(15,23,42,0.7);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -277,7 +266,7 @@
     .house-photo {
       position: relative;
       width: 100%;
-      border-radius: 0.9rem;
+      border-radius: 0.8rem;
       overflow: hidden;
       aspect-ratio: 4 / 3;
       background: #020617;
@@ -292,39 +281,35 @@
     }
 
     @keyframes houseGlow {
-      0%,100% { box-shadow: 0 18px 35px rgba(15,23,42,0.7);}
-      50% { box-shadow: 0 25px 45px rgba(234,179,8,0.45);}
+      0%,100% { box-shadow: 0 14px 30px rgba(15,23,42,0.7);}
+      50% { box-shadow: 0 20px 40px rgba(234,179,8,0.45);}
     }
 
     .house-header {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.25rem;
+      gap: 0.4rem;
+      margin-bottom: 0.2rem;
     }
 
     .house-emoji {
-      font-size: 1.9rem;
-      filter: drop-shadow(0 0 8px rgba(250,204,21,0.7));
+      font-size: 1.6rem;
+      filter: drop-shadow(0 0 6px rgba(250,204,21,0.7));
     }
 
     .house-name {
-      font-size: clamp(1rem, 1.9vw, 1.3rem);
+      font-size: clamp(0.95rem, 1.7vw, 1.15rem);
       font-weight: 600;
     }
 
-    .house-desc {
-      display: none;
-    }
-
     .house-footer {
-      font-size: clamp(0.8rem, 1.3vw, 0.95rem);
+      font-size: clamp(0.75rem, 1.3vw, 0.9rem);
       color: rgba(226,232,240,0.65);
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      margin-top: 0.2rem;
-      gap: 0.4rem;
+      margin-top: 0.15rem;
+      gap: 0.3rem;
     }
 
     .house .dot {
@@ -336,8 +321,8 @@
     }
 
     .house-hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 24px 48px rgba(234,179,8,0.6);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 22px 42px rgba(234,179,8,0.6);
       border-color: var(--accent);
       background: linear-gradient(145deg, rgba(250,204,21,0.35), rgba(15,23,42,0.95));
     }
@@ -347,9 +332,9 @@
     }
 
     @keyframes houseDrop {
-      0% { transform: translateY(-2px) scale(1.02); }
-      50% { transform: translateY(2px) scale(1.04); }
-      100% { transform: translateY(0) scale(1.02); }
+      0% { transform: translateY(-2px) scale(1.01); }
+      50% { transform: translateY(2px) scale(1.03); }
+      100% { transform: translateY(0) scale(1.01); }
     }
 
     /* BOTTOM BAR */
@@ -357,30 +342,31 @@
     .bottom-bar {
       display: flex;
       justify-content: space-between;
-      gap: 0.7rem;
+      gap: 0.5rem;
       align-items: center;
-      margin-top: 0.3rem;
+      margin-top: 0.1rem;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
 
     .status-text {
-      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      font-size: clamp(0.95rem, 1.7vw, 1.15rem);
       color: var(--text-muted);
     }
 
     .btn {
       border: none;
       border-radius: 999px;
-      padding: 0.7rem 1.2rem;
-      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+      padding: 0.55rem 1rem;
+      font-size: clamp(0.85rem, 1.6vw, 1.05rem);
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       background: radial-gradient(circle at top left, #facc15, #eab308);
       color: #111827;
-      box-shadow: 0 14px 30px rgba(234,179,8,0.6);
+      box-shadow: 0 12px 26px rgba(234,179,8,0.6);
       transition: transform 0.16s ease, box-shadow 0.16s ease;
       white-space: nowrap;
     }
@@ -393,13 +379,11 @@
     .btn-secondary {
       background: rgba(15,23,42,0.9);
       color: var(--text-main);
-      box-shadow: 0 10px 24px rgba(15,23,42,0.8);
+      box-shadow: 0 9px 22px rgba(15,23,42,0.8);
       border: 1px solid rgba(148,163,184,0.7);
     }
 
-    .btn span.icon {
-      font-size: 1.1em;
-    }
+    .btn span.icon { font-size: 1.1em; }
 
     /* SUMMARY MODAL */
 
@@ -414,9 +398,7 @@
       padding: 1.2rem;
     }
 
-    .modal-backdrop.show {
-      display: flex;
-    }
+    .modal-backdrop.show { display: flex; }
 
     .modal {
       width: 100%;
@@ -424,7 +406,7 @@
       max-height: 90vh;
       background: radial-gradient(circle at top, #111827, #020617);
       border-radius: 1.4rem;
-      padding: 1.1rem 1.2rem 1.2rem;
+      padding: 1.1rem 1.2rem 1.1rem;
       box-shadow: var(--shadow-strong);
       border: 1px solid rgba(148,163,184,0.7);
       display: flex;
@@ -435,7 +417,7 @@
 
     @media (min-width: 768px) {
       .modal {
-        padding: 1.2rem 1.6rem 1.3rem;
+        padding: 1.1rem 1.6rem 1.1rem;
       }
     }
 
@@ -454,14 +436,12 @@
       gap: 0.5rem;
     }
 
-    .modal-title span.icon {
-      font-size: 1.4em;
-    }
+    .modal-title span.icon { font-size: 1.4em; }
 
     .modal-body {
       overflow-y: auto;
-      padding-right: 0.4rem;
-      margin-top: 0.4rem;
+      padding-right: 0.3rem;
+      margin-top: 0.3rem;
     }
 
     .summary-item {
@@ -496,9 +476,7 @@
       display: block;
     }
 
-    .summary-name {
-      font-weight: 500;
-    }
+    .summary-name { font-weight: 500; }
 
     .summary-tagline {
       color: var(--text-muted);
@@ -513,9 +491,7 @@
       font-weight: 600;
     }
 
-    .summary-house span.emoji {
-      font-size: 1.2em;
-    }
+    .summary-house span.emoji { font-size: 1.2em; }
 
     .empty-state {
       text-align: center;
@@ -523,15 +499,12 @@
       font-size: 0.9rem;
       color: var(--text-muted);
     }
-
   </style>
 </head>
 <body>
   <div class="app">
     <div>
-      <div class="title">
-        <!-- убран значок и текст -->
-      </div>
+      <div class="title"></div>
       <div class="subtitle"></div>
       <div class="verse"></div>
     </div>
@@ -554,9 +527,7 @@
               </div>
             </div>
 
-            <div class="person-stats" id="person-stats">
-              <!-- заполняется из JS -->
-            </div>
+            <div class="person-stats" id="person-stats"></div>
 
             <div class="person-counter" id="person-counter">
               Персонаж 1 из 1
@@ -577,7 +548,7 @@
               </div>
             </div>
             <div class="house-photo">
-              <img id="house-img-0" src="" alt="Дом 1">
+              <img id="house-img-0" src="home1.webp" alt="Дом 1">
             </div>
             <div class="house-footer">
               <span class="dot"></span>
@@ -592,7 +563,7 @@
               </div>
             </div>
             <div class="house-photo">
-              <img id="house-img-1" src="" alt="Дом 2">
+              <img id="house-img-1" src="home2.jpg" alt="Дом 2">
             </div>
             <div class="house-footer">
               <span class="dot"></span>
@@ -607,7 +578,7 @@
               </div>
             </div>
             <div class="house-photo">
-              <img id="house-img-2" src="" alt="Дом 3">
+              <img id="house-img-2" src="howe3.webp" alt="Дом 3">
             </div>
             <div class="house-footer">
               <span class="dot"></span>
@@ -622,7 +593,7 @@
               </div>
             </div>
             <div class="house-photo">
-              <img id="house-img-3" src="" alt="Дом 4">
+              <img id="house-img-3" src="home4.webp" alt="Дом 4">
             </div>
             <div class="house-footer">
               <span class="dot"></span>
@@ -665,7 +636,7 @@
       </div>
       <div class="modal-body" id="summary-body">
         <div class="empty-state">
-          Пока никого не заселили. Сначала перетащите несколько персонажей в дома.
+          Пока никого не заселили. Сначала перетащите нескольких персонажей в дома.
         </div>
       </div>
       <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.3rem;">
@@ -762,7 +733,6 @@
             personCard.style.position = '';
             personCard.style.left = '';
             personCard.style.top = '';
-            personCard.style.transform = '';
             personCard.style.transition = '';
           }, 190);
         }
@@ -897,7 +867,7 @@
       summaryBody.innerHTML = '';
 
       if (!results.length) {
-        summaryBody.innerHTML = '<div class="empty-state">Пока никого не заселили. Сначала перетащите несколько персонажей в дома.</div>';
+        summaryBody.innerHTML = '<div class="empty-state">Пока никого не заселили. Сначала перетащите нескольких персонажей в дома.</div>';
         return;
       }
 
@@ -928,8 +898,6 @@
         summaryBody.appendChild(row);
       });
     }
-
-    // PEOPLE CONFIG
 
     const PEOPLE = [
       {
@@ -1030,51 +998,9 @@
       }
     ];
 
-    const HOUSES_CONFIG = [
-      {
-        name: 'Дом 1',
-        emoji: '🏚️',
-        img: 'home1.webp'
-      },
-      {
-        name: 'Дом 2',
-        emoji: '🏠',
-        img: 'home2.jpg'
-      },
-      {
-        name: 'Дом 3',
-        emoji: '🏡',
-        img: 'howe3.webp'
-      },
-      {
-        name: 'Дом 4',
-        emoji: '🏛️',
-        img: 'home4.webp'
-      }
-    ];
-
-    function initConfig() {
-      people = PEOPLE.slice();
-
-      HOUSES_CONFIG.forEach((h, idx) => {
-        const nameEl = document.getElementById('house-name-' + idx);
-        const emojiEl = houses[idx]?.querySelector('.house-emoji');
-        const imgEl = document.getElementById('house-img-' + idx);
-        if (!houses[idx]) return;
-        if (nameEl) nameEl.textContent = h.name;
-        if (emojiEl && h.emoji) emojiEl.textContent = h.emoji;
-        if (imgEl && h.img) imgEl.src = h.img;
-      });
-    }
-
     window.addEventListener('load', () => {
-      initConfig();
-      if (people.length === 0) {
-        statusTextEl.textContent = 'Добавьте персонажей в массив PEOPLE внизу файла.';
-        personCard.style.display = 'none';
-      } else {
-        showPerson(0);
-      }
+      people = PEOPLE.slice();
+      showPerson(0);
     });
   </script>
 </body>
